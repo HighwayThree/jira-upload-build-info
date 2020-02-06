@@ -8,15 +8,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/argush3/jira-upload-build-info.git"
+    "url": "git+https://github.com/HighwayThree/jira-upload-build-info.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/argush3/jira-upload-build-info/issues"
+    "url": "https://github.com/HighwayThree/jira-upload-build-info/issues"
   },
-  "homepage": "https://github.com/argush3/jira-upload-build-info#readme",
+  "homepage": "https://github.com/HighwayThree/jira-upload-build-info#readme",
   "dependencies": {
     "@actions/core": "^1.2.1",
     "@actions/github": "^2.0.1",
