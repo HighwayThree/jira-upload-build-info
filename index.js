@@ -1,6 +1,6 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const core = require('@actions/core');
-const github = require('@actions/github');
 const request = require('request-promise-native');
 const dateFormat = require('dateformat');
 var tokenBodyData = {
@@ -18,24 +18,25 @@ var tokenOptions = {
     },
     body: {}
 };
-let build = {
-    schemaVersion: "1.0",
-    pipelineId: "",
-    buildNumber: null,
-    updateSequenceNumber: null,
-    displayName: "",
-    url: "",
-    state: "",
-    lastUpdated: "",
-    issueKeys: [],
-    testInfo: {
-        totalNumber: 0,
-        numberPassed: 0,
-        numberFailed: 0,
-        numberSkipped: 0
-    },
-    references: []
-};
+// let build: any =
+//     {
+//         schemaVersion: "1.0",
+//         pipelineId: "",
+//         buildNumber: null,
+//         updateSequenceNumber: null,
+//         displayName: "" ,
+//         url: "",
+//         state: "",
+//         lastUpdated: "",
+//         issueKeys: [],
+//         testInfo: {
+//             totalNumber: 0,
+//             numberPassed: 0,
+//             numberFailed: 0,
+//             numberSkipped: 0
+//         },
+//         references: []
+//     };
 let buildRef = {
     commit: {
         id: "",
@@ -82,23 +83,38 @@ async function submitBuildInfo(accessToken) {
     buildRef.commit.id = commitId;
     buildRef.commit.repositoryUri = buildRefUrl;
     buildRef.ref.uri = buildRefUrl;
-    build.pipelineId = pipelineId;
-    build.buildNumber = buildNumber;
-    build.updateSequenceNumber = updateSequenceNumber;
-    build.displayName = buildDisplayName;
-    build.url = buildUrl;
-    build.state = buildState;
+    let build = {
+        schemaVersion: "1.0",
+        pipelineId: pipelineId || "",
+        buildNumber: buildNumber || null,
+        updateSequenceNumber: updateSequenceNumber || null,
+        displayName: buildDisplayName || "",
+        url: buildUrl || "",
+        state: buildState || "",
+        lastUpdated: lastUpdated || "",
+        issueKeys: issueKeys.split(',') || [],
+        references: [buildRef] || [],
+    };
     console.log("build.state: " + build.state);
-    build.lastUpdated = lastUpdated;
-    build.issueKeys = issueKeys.split(',');
-    build.references = [buildRef];
+    // build.pipelineId = pipelineId;
+    // build.buildNumber = buildNumber;
+    // build.updateSequenceNumber = updateSequenceNumber;
+    // build.displayName = buildDisplayName;
+    // build.url = buildUrl;
+    // build.state = buildState;
+    // console.log("build.state: " + build.state);
+    // build.lastUpdated = lastUpdated;
+    // build.issueKeys = issueKeys.split(',');
+    // build.references = [buildRef];
     console.log("testInfoTotalNum: " + testInfoTotalNum);
     if (testInfoTotalNum) {
         console.log("assign test info");
-        build.testInfo.totalNumber = testInfoTotalNum;
-        build.testInfo.numberPassed = testInfoNumPassed;
-        build.testInfo.numberFailed = testInfoNumFailed;
-        build.testInfo.numberSkipped = testInfoNumSkipped;
+        build.testInfo = {
+            totalNumber: testInfoTotalNum,
+            numberPassed: testInfoNumPassed,
+            numberFailed: testInfoNumFailed,
+            numberSkipped: testInfoNumSkipped,
+        };
     }
     bodyData.builds = [build];
     bodyData = JSON.stringify(bodyData);
