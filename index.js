@@ -3,22 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core = require('@actions/core');
 const request = require('request-promise-native');
 const dateFormat = require('dateformat');
-// var tokenBodyData: any = {
-//     "audience": "api.atlassian.com",
-//     "grant_type":"client_credentials",
-//     "client_id": '',
-//     "client_secret": ''
-// };
-let buildRef = {
-    commit: {
-        id: "",
-        repositoryUri: ""
-    },
-    ref: {
-        name: "buildRef",
-        uri: ""
-    }
-};
 async function submitBuildInfo(accessToken) {
     const cloudId = core.getInput('cloud-id');
     const pipelineId = core.getInput('pipeline-id');
@@ -36,9 +20,16 @@ async function submitBuildInfo(accessToken) {
     const testInfoNumFailed = core.getInput('test-info-num-failed');
     const testInfoNumSkipped = core.getInput('test-info-num-skipped');
     lastUpdated = dateFormat(lastUpdated, "yyyy-mm-dd'T'HH:MM:ss'Z'");
-    buildRef.commit.id = commitId;
-    buildRef.commit.repositoryUri = buildRefUrl;
-    buildRef.ref.uri = buildRefUrl;
+    const buildRef = {
+        commit: {
+            id: commitId || "",
+            repositoryUri: buildRefUrl || "",
+        },
+        ref: {
+            name: "buildRef",
+            uri: buildRefUrl || "",
+        },
+    };
     let build = {
         schemaVersion: "1.0",
         pipelineId: pipelineId || "",
@@ -95,8 +86,8 @@ async function getAccessToken() {
     let tokenBodyData = {
         "audience": "api.atlassian.com",
         "grant_type": "client_credentials",
-        "client_id": clientId,
-        "client_secret": clientSecret,
+        "client_id": clientId || "",
+        "client_secret": clientSecret || "",
     };
     tokenBodyData = JSON.stringify(tokenBodyData);
     const tokenOptions = {

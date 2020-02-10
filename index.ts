@@ -1,29 +1,11 @@
 import { iBuild } from "./interfaces/iBuild";
+import { iBuildRef } from "./interfaces/iBuildRef"
 import { iOptions } from "./interfaces/iOptions";
 import { iTokenOptions } from "./interfaces/iTokenOptions";
 
 const core = require('@actions/core');
 const request = require('request-promise-native');
 const dateFormat = require('dateformat');
-
-// var tokenBodyData: any = {
-//     "audience": "api.atlassian.com",
-//     "grant_type":"client_credentials",
-//     "client_id": '',
-//     "client_secret": ''
-// };
-
-let buildRef: any =
-    {
-        commit: {
-            id: "",
-            repositoryUri: ""
-        },
-        ref: {
-            name: "buildRef",
-            uri: ""
-        }
-    };
 
 async function submitBuildInfo(accessToken: any) {
     const cloudId = core.getInput('cloud-id');
@@ -43,9 +25,16 @@ async function submitBuildInfo(accessToken: any) {
     const testInfoNumSkipped = core.getInput('test-info-num-skipped');
 
     lastUpdated = dateFormat(lastUpdated, "yyyy-mm-dd'T'HH:MM:ss'Z'");
-    buildRef.commit.id = commitId;
-    buildRef.commit.repositoryUri = buildRefUrl;
-    buildRef.ref.uri = buildRefUrl;
+    const buildRef: iBuildRef = {
+        commit: {
+            id: commitId || "",
+            repositoryUri: buildRefUrl || "",
+        },
+        ref: {
+            name: "buildRef",
+            uri: buildRefUrl || "",
+        },
+    };
 
     let build: iBuild  = {
         schemaVersion: "1.0",
@@ -110,8 +99,8 @@ async function getAccessToken() {
     let tokenBodyData: any = {
         "audience": "api.atlassian.com",
         "grant_type":"client_credentials",
-        "client_id": clientId,
-        "client_secret": clientSecret,
+        "client_id": clientId || "",
+        "client_secret": clientSecret || "",
     };
     tokenBodyData = JSON.stringify(tokenBodyData);
     
