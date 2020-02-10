@@ -9,15 +9,6 @@ var tokenBodyData = {
     "client_id": '',
     "client_secret": ''
 };
-// var tokenOptions = {
-//     method: 'POST',
-//     url: 'https://api.atlassian.com/oauth/token',
-//     headers: {
-//         'Accept': 'application/json',
-//         'Content-Type': 'application/json'
-//     },
-//     body: {}
-// };
 let buildRef = {
     commit: {
         id: "",
@@ -28,16 +19,16 @@ let buildRef = {
         uri: ""
     }
 };
-let options = {
-    method: 'POST',
-    url: '',
-    headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: ''
-    },
-    body: {}
-};
+// let options = {
+//     method: 'POST',
+//     url: '',
+//     headers: {
+//         'Accept': 'application/json',
+//         'Content-Type': 'application/json',
+//         Authorization: ''
+//     },
+//     body: {}
+// };
 async function submitBuildInfo(accessToken) {
     const cloudId = core.getInput('cloud-id');
     const pipelineId = core.getInput('pipeline-id');
@@ -86,9 +77,16 @@ async function submitBuildInfo(accessToken) {
     };
     bodyData = JSON.stringify(bodyData);
     console.log("bodyData: " + bodyData);
-    options.body = bodyData;
-    options.url = "https://api.atlassian.com/jira/builds/0.1/cloud/" + cloudId + "/bulk";
-    options.headers.Authorization = "Bearer " + accessToken;
+    const options = {
+        method: 'POST',
+        url: "https://api.atlassian.com/jira/builds/0.1/cloud/" + cloudId + "/bulk",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: "Bearer " + accessToken,
+        },
+        body: bodyData,
+    };
     let responseJson = await request(options);
     let response = JSON.parse(responseJson);
     if (response.rejectedBuilds && response.rejectedBuilds.length > 0) {

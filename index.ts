@@ -1,4 +1,5 @@
 import { iBuild } from "./interfaces/iBuild";
+import { iOptions } from "./interfaces/iOptions";
 import { iTokenOptions } from "./interfaces/iTokenOptions";
 
 const core = require('@actions/core');
@@ -12,16 +13,6 @@ var tokenBodyData: any = {
     "client_secret": ''
 };
 
-// var tokenOptions = {
-//     method: 'POST',
-//     url: 'https://api.atlassian.com/oauth/token',
-//     headers: {
-//         'Accept': 'application/json',
-//         'Content-Type': 'application/json'
-//     },
-//     body: {}
-// };
-
 let buildRef: any =
     {
         commit: {
@@ -34,16 +25,16 @@ let buildRef: any =
         }
     };
 
-let options = {
-    method: 'POST',
-    url: '',
-    headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: ''
-    },
-    body: {}
-};
+// let options = {
+//     method: 'POST',
+//     url: '',
+//     headers: {
+//         'Accept': 'application/json',
+//         'Content-Type': 'application/json',
+//         Authorization: ''
+//     },
+//     body: {}
+// };
 
 async function submitBuildInfo(accessToken: any) {
     const cloudId = core.getInput('cloud-id');
@@ -99,9 +90,16 @@ async function submitBuildInfo(accessToken: any) {
     bodyData = JSON.stringify(bodyData);
     console.log("bodyData: " + bodyData);
 
-    options.body = bodyData;
-    options.url = "https://api.atlassian.com/jira/builds/0.1/cloud/" + cloudId + "/bulk";
-    options.headers.Authorization = "Bearer " + accessToken;
+    const options: iOptions = {
+        method: 'POST',
+        url: "https://api.atlassian.com/jira/builds/0.1/cloud/" + cloudId + "/bulk",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            Authorization:"Bearer " + accessToken,
+        },
+        body: bodyData,
+    }
 
     let responseJson = await request(options);
     let response = JSON.parse(responseJson);
