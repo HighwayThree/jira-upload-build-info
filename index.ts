@@ -33,11 +33,6 @@ let buildRef: any =
         }
     };
 
-let bodyData: any =
-    {
-        builds: []
-    };
-
 let options = {
     method: 'POST',
     url: '',
@@ -60,16 +55,13 @@ async function submitBuildInfo(accessToken: any) {
     let lastUpdated = core.getInput('last-updated');
     const issueKeys = core.getInput('issue-keys');
     const commitId = core.getInput('commit-id');
-    // const repoUrl = core.getInput('repo-url');
     const buildRefUrl = core.getInput('build-ref-url');
     const testInfoTotalNum = core.getInput('test-info-total-num');
     const testInfoNumPassed = core.getInput('test-info-num-passed');
     const testInfoNumFailed = core.getInput('test-info-num-failed');
     const testInfoNumSkipped = core.getInput('test-info-num-skipped');
 
-    // console.log("lastUpdated: " + lastUpdated);
     lastUpdated = dateFormat(lastUpdated, "yyyy-mm-dd'T'HH:MM:ss'Z'");
-    // console.log("formatted lastUpdated: " + lastUpdated);
     buildRef.commit.id = commitId;
     buildRef.commit.repositoryUri = buildRefUrl;
     buildRef.ref.uri = buildRefUrl;
@@ -99,8 +91,10 @@ async function submitBuildInfo(accessToken: any) {
             numberSkipped: testInfoNumSkipped,
         }
     }
-
-    bodyData.builds = [build];
+    let bodyData: any =
+    {
+        builds: [build]
+    };
     bodyData = JSON.stringify(bodyData);
     console.log("bodyData: " + bodyData);
 
@@ -108,14 +102,8 @@ async function submitBuildInfo(accessToken: any) {
     options.url = "https://api.atlassian.com/jira/builds/0.1/cloud/" + cloudId + "/bulk";
     options.headers.Authorization = "Bearer " + accessToken;
 
-    // console.log("options: ", options);
-
-    // const payload = JSON.stringify(github.context.payload, undefined, 2)
-    // console.log(`The event payload: ${payload}`);
-
     let responseJson = await request(options);
     let response = JSON.parse(responseJson);
-    // console.log("response: ", response);
     if(response.rejectedBuilds && response.rejectedBuilds.length > 0) {
         const rejectedBuild = response.rejectedBuilds[0];
         console.log("errors: ", rejectedBuild.errors);
@@ -135,8 +123,6 @@ async function getAccessToken() {
     tokenBodyData.client_secret = clientSecret;
     tokenBodyData = JSON.stringify(tokenBodyData);
     tokenOptions.body = tokenBodyData;
-    // const payload = JSON.stringify(github.context.payload, undefined, 2)
-    // console.log(`The event payload: ${payload}`);
 
     console.log("tokenOptions: ", tokenOptions);
     const response = await request(tokenOptions);
