@@ -1,14 +1,15 @@
-"use strict";
 const core = require('@actions/core');
 const github = require('@actions/github');
 const request = require('request-promise-native');
 const dateFormat = require('dateformat');
-var tokenBodyData = {
+
+var tokenBodyData: any = {
     "audience": "api.atlassian.com",
-    "grant_type": "client_credentials",
+    "grant_type":"client_credentials",
     "client_id": '',
     "client_secret": ''
 };
+
 var tokenOptions = {
     method: 'POST',
     url: 'https://api.atlassian.com/oauth/token',
@@ -18,37 +19,44 @@ var tokenOptions = {
     },
     body: {}
 };
-let build = {
-    schemaVersion: "1.0",
-    pipelineId: "",
-    buildNumber: null,
-    updateSequenceNumber: null,
-    displayName: "",
-    url: "",
-    state: "",
-    lastUpdated: "",
-    issueKeys: [],
-    testInfo: {
-        totalNumber: 0,
-        numberPassed: 0,
-        numberFailed: 0,
-        numberSkipped: 0
-    },
-    references: []
-};
-let buildRef = {
-    commit: {
-        id: "",
-        repositoryUri: ""
-    },
-    ref: {
-        name: "buildRef",
-        uri: ""
-    }
-};
-let bodyData = {
-    builds: []
-};
+
+let build: any =
+    {
+        schemaVersion: "1.0",
+        pipelineId: "",
+        buildNumber: null,
+        updateSequenceNumber: null,
+        displayName: "" ,
+        url: "",
+        state: "",
+        lastUpdated: "",
+        issueKeys: [],
+        testInfo: {
+            totalNumber: 0,
+            numberPassed: 0,
+            numberFailed: 0,
+            numberSkipped: 0
+        },
+        references: []
+    };
+
+let buildRef =
+    {
+        commit: {
+            id: "",
+            repositoryUri: ""
+        },
+        ref: {
+            name: "buildRef",
+            uri: ""
+        }
+    };
+
+let bodyData: any =
+    {
+        builds: []
+    };
+
 let options = {
     method: 'POST',
     url: '',
@@ -59,7 +67,8 @@ let options = {
     },
     body: {}
 };
-async function submitBuildInfo(accessToken) {
+
+async function submitBuildInfo(accessToken: any) {
     const cloudId = core.getInput('cloud-id');
     const pipelineId = core.getInput('pipeline-id');
     const buildNumber = core.getInput('build-number');
@@ -76,12 +85,14 @@ async function submitBuildInfo(accessToken) {
     const testInfoNumPassed = core.getInput('test-info-num-passed');
     const testInfoNumFailed = core.getInput('test-info-num-failed');
     const testInfoNumSkipped = core.getInput('test-info-num-skipped');
+
     // console.log("lastUpdated: " + lastUpdated);
     lastUpdated = dateFormat(lastUpdated, "yyyy-mm-dd'T'HH:MM:ss'Z'");
     // console.log("formatted lastUpdated: " + lastUpdated);
     buildRef.commit.id = commitId;
     buildRef.commit.repositoryUri = buildRefUrl;
     buildRef.ref.uri = buildRefUrl;
+
     build.pipelineId = pipelineId;
     build.buildNumber = buildNumber;
     build.updateSequenceNumber = updateSequenceNumber;
@@ -92,58 +103,68 @@ async function submitBuildInfo(accessToken) {
     build.lastUpdated = lastUpdated;
     build.issueKeys = issueKeys.split(',');
     build.references = [buildRef];
+
     console.log("testInfoTotalNum: " + testInfoTotalNum);
-    if (testInfoTotalNum) {
+
+    if(testInfoTotalNum) {
         console.log("assign test info");
         build.testInfo.totalNumber = testInfoTotalNum;
         build.testInfo.numberPassed = testInfoNumPassed;
         build.testInfo.numberFailed = testInfoNumFailed;
         build.testInfo.numberSkipped = testInfoNumSkipped;
     }
+
     bodyData.builds = [build];
     bodyData = JSON.stringify(bodyData);
     console.log("bodyData: " + bodyData);
+
     options.body = bodyData;
     options.url = "https://api.atlassian.com/jira/builds/0.1/cloud/" + cloudId + "/bulk";
     options.headers.Authorization = "Bearer " + accessToken;
+
     // console.log("options: ", options);
+
     // const payload = JSON.stringify(github.context.payload, undefined, 2)
     // console.log(`The event payload: ${payload}`);
+
     let responseJson = await request(options);
     let response = JSON.parse(responseJson);
     // console.log("response: ", response);
-    if (response.rejectedBuilds && response.rejectedBuilds.length > 0) {
+    if(response.rejectedBuilds && response.rejectedBuilds.length > 0) {
         const rejectedBuild = response.rejectedBuilds[0];
         console.log("errors: ", rejectedBuild.errors);
-        let errors = rejectedBuild.errors.map((error) => error.message).join(',');
+        let errors = rejectedBuild.errors.map((error: any) => error.message).join(',');
         errors.substr(0, errors.length - 1);
         console.log("joined errors: ", errors);
         core.setFailed(errors);
     }
     core.setOutput("response", responseJson);
 }
+
 async function getAccessToken() {
     const clientId = core.getInput('client-id');
     const clientSecret = core.getInput('client-secret');
+
     tokenBodyData.client_id = clientId;
     tokenBodyData.client_secret = clientSecret;
     tokenBodyData = JSON.stringify(tokenBodyData);
     tokenOptions.body = tokenBodyData;
     // const payload = JSON.stringify(github.context.payload, undefined, 2)
     // console.log(`The event payload: ${payload}`);
+
     console.log("tokenOptions: ", tokenOptions);
     const response = await request(tokenOptions);
     console.log("getAccessToken response: ", response);
     return JSON.parse(response);
 }
+
 (async function () {
     try {
         const accessTokenResponse = await getAccessToken();
         console.log("accessTokenResponse: ", accessTokenResponse);
         await submitBuildInfo(accessTokenResponse.access_token);
         console.log("finished submiting build info");
-    }
-    catch (error) {
+    } catch (error) {
         core.setFailed(error.message);
     }
 })();
