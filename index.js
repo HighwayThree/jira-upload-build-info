@@ -18,25 +18,6 @@ var tokenOptions = {
     },
     body: {}
 };
-// let build: any =
-//     {
-//         schemaVersion: "1.0",
-//         pipelineId: "",
-//         buildNumber: null,
-//         updateSequenceNumber: null,
-//         displayName: "" ,
-//         url: "",
-//         state: "",
-//         lastUpdated: "",
-//         issueKeys: [],
-//         testInfo: {
-//             totalNumber: 0,
-//             numberPassed: 0,
-//             numberFailed: 0,
-//             numberSkipped: 0
-//         },
-//         references: []
-//     };
 let buildRef = {
     commit: {
         id: "",
@@ -96,16 +77,6 @@ async function submitBuildInfo(accessToken) {
         references: [buildRef] || [],
     };
     console.log("build.state: " + build.state);
-    // build.pipelineId = pipelineId;
-    // build.buildNumber = buildNumber;
-    // build.updateSequenceNumber = updateSequenceNumber;
-    // build.displayName = buildDisplayName;
-    // build.url = buildUrl;
-    // build.state = buildState;
-    // console.log("build.state: " + build.state);
-    // build.lastUpdated = lastUpdated;
-    // build.issueKeys = issueKeys.split(',');
-    // build.references = [buildRef];
     console.log("testInfoTotalNum: " + testInfoTotalNum);
     if (testInfoTotalNum) {
         console.log("assign test info");
