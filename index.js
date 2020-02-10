@@ -3,12 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core = require('@actions/core');
 const request = require('request-promise-native');
 const dateFormat = require('dateformat');
-var tokenBodyData = {
-    "audience": "api.atlassian.com",
-    "grant_type": "client_credentials",
-    "client_id": '',
-    "client_secret": ''
-};
+// var tokenBodyData: any = {
+//     "audience": "api.atlassian.com",
+//     "grant_type":"client_credentials",
+//     "client_id": '',
+//     "client_secret": ''
+// };
 let buildRef = {
     commit: {
         id: "",
@@ -19,16 +19,6 @@ let buildRef = {
         uri: ""
     }
 };
-// let options = {
-//     method: 'POST',
-//     url: '',
-//     headers: {
-//         'Accept': 'application/json',
-//         'Content-Type': 'application/json',
-//         Authorization: ''
-//     },
-//     body: {}
-// };
 async function submitBuildInfo(accessToken) {
     const cloudId = core.getInput('cloud-id');
     const pipelineId = core.getInput('pipeline-id');
@@ -102,8 +92,12 @@ async function submitBuildInfo(accessToken) {
 async function getAccessToken() {
     const clientId = core.getInput('client-id');
     const clientSecret = core.getInput('client-secret');
-    tokenBodyData.client_id = clientId;
-    tokenBodyData.client_secret = clientSecret;
+    let tokenBodyData = {
+        "audience": "api.atlassian.com",
+        "grant_type": "client_credentials",
+        "client_id": clientId,
+        "client_secret": clientSecret,
+    };
     tokenBodyData = JSON.stringify(tokenBodyData);
     const tokenOptions = {
         method: 'POST',

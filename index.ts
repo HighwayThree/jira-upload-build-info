@@ -6,12 +6,12 @@ const core = require('@actions/core');
 const request = require('request-promise-native');
 const dateFormat = require('dateformat');
 
-var tokenBodyData: any = {
-    "audience": "api.atlassian.com",
-    "grant_type":"client_credentials",
-    "client_id": '',
-    "client_secret": ''
-};
+// var tokenBodyData: any = {
+//     "audience": "api.atlassian.com",
+//     "grant_type":"client_credentials",
+//     "client_id": '',
+//     "client_secret": ''
+// };
 
 let buildRef: any =
     {
@@ -24,17 +24,6 @@ let buildRef: any =
             uri: ""
         }
     };
-
-// let options = {
-//     method: 'POST',
-//     url: '',
-//     headers: {
-//         'Accept': 'application/json',
-//         'Content-Type': 'application/json',
-//         Authorization: ''
-//     },
-//     body: {}
-// };
 
 async function submitBuildInfo(accessToken: any) {
     const cloudId = core.getInput('cloud-id');
@@ -118,9 +107,14 @@ async function getAccessToken() {
     const clientId = core.getInput('client-id');
     const clientSecret = core.getInput('client-secret');
 
-    tokenBodyData.client_id = clientId;
-    tokenBodyData.client_secret = clientSecret;
+    let tokenBodyData: any = {
+        "audience": "api.atlassian.com",
+        "grant_type":"client_credentials",
+        "client_id": clientId,
+        "client_secret": clientSecret,
+    };
     tokenBodyData = JSON.stringify(tokenBodyData);
+    
     const tokenOptions: iTokenOptions = {
         method: 'POST',
         url: 'https://api.atlassian.com/oauth/token',
