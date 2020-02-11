@@ -115,3 +115,4 @@ async function getAccessToken() {
         core.setFailed(error.message);
     }
 })();
+exports.default = submitBuildInfo;
