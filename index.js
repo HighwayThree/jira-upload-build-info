@@ -35,7 +35,7 @@ async function submitBuildInfo(accessToken) {
     };
     let build = {
         schemaVersion: "1.0",
-        pipelineId: `${github.context.payload.repository} ${github.workflow}` || pipelineId || "",
+        pipelineId: github.context.payload.repository.url + ' ' + github.workflow || pipelineId || "",
         buildNumber: buildNumber || github.context.run_number,
         updateSequenceNumber: updateSequenceNumber || null,
         displayName: buildDisplayName || "",
