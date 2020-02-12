@@ -41,7 +41,7 @@ async function submitBuildInfo(accessToken: any) {
 
     let build: iBuild  = {
         schemaVersion: "1.0",
-        pipelineId: github.context.payload.repository.url + ' ' + github.workflow || pipelineId || "",
+        pipelineId: `${github.context.payload.repository.url} ${github.context.workflow}` || pipelineId || "",
         buildNumber: buildNumber || github.context.run_number,
         updateSequenceNumber: updateSequenceNumber || null,
         displayName: buildDisplayName || "",
