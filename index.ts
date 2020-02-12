@@ -1,9 +1,13 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+import { iBuild } from "./interfaces/iBuild";
+import { iBuildRef } from "./interfaces/iBuildRef"
+import { iOptions } from "./interfaces/iOptions";
+import { iTokenOptions } from "./interfaces/iTokenOptions";
+
 const core = require('@actions/core');
 const request = require('request-promise-native');
 const dateFormat = require('dateformat');
-async function submitBuildInfo(accessToken) {
+
+async function submitBuildInfo(accessToken: any) {
     const cloudId = core.getInput('cloud-id');
     const pipelineId = core.getInput('pipeline-id');
     const buildNumber = core.getInput('build-number');
@@ -19,8 +23,9 @@ async function submitBuildInfo(accessToken) {
     const testInfoNumPassed = core.getInput('test-info-num-passed');
     const testInfoNumFailed = core.getInput('test-info-num-failed');
     const testInfoNumSkipped = core.getInput('test-info-num-skipped');
+
     lastUpdated = dateFormat(lastUpdated, "yyyy-mm-dd'T'HH:MM:ss'Z'");
-    const buildRef = {
+    const buildRef: iBuildRef = {
         commit: {
             id: commitId || "",
             repositoryUri: buildRefUrl || "",
@@ -30,7 +35,8 @@ async function submitBuildInfo(accessToken) {
             uri: buildRefUrl || "",
         },
     };
-    let build = {
+
+    let build: iBuild  = {
         schemaVersion: "1.0",
         pipelineId: pipelineId || "",
         buildNumber: buildNumber || null,
@@ -43,55 +49,62 @@ async function submitBuildInfo(accessToken) {
         references: [buildRef] || [],
     };
     console.log("build.state: " + build.state);
+
     console.log("testInfoTotalNum: " + testInfoTotalNum);
-    if (testInfoTotalNum) {
+
+    if(testInfoTotalNum) {
         console.log("assign test info");
         build.testInfo = {
             totalNumber: testInfoTotalNum,
             numberPassed: testInfoNumPassed,
             numberFailed: testInfoNumFailed,
             numberSkipped: testInfoNumSkipped,
-        };
+        }
     }
-    let bodyData = {
+    let bodyData: any =
+    {
         builds: [build]
     };
     bodyData = JSON.stringify(bodyData);
     console.log("bodyData: " + bodyData);
-    const options = {
+
+    const options: iOptions = {
         method: 'POST',
         url: "https://api.atlassian.com/jira/builds/0.1/cloud/" + cloudId + "/bulk",
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            Authorization: "Bearer " + accessToken,
+            Authorization:"Bearer " + accessToken,
         },
         body: bodyData,
-    };
+    }
+
     let responseJson = await request(options);
     let response = JSON.parse(responseJson);
-    if (response.rejectedBuilds && response.rejectedBuilds.length > 0) {
+    if(response.rejectedBuilds && response.rejectedBuilds.length > 0) {
         const rejectedBuild = response.rejectedBuilds[0];
         console.log("errors: ", rejectedBuild.errors);
-        let errors = rejectedBuild.errors.map((error) => error.message).join(',');
+        let errors = rejectedBuild.errors.map((error: any) => error.message).join(',');
         errors.substr(0, errors.length - 1);
         console.log("joined errors: ", errors);
         core.setFailed(errors);
     }
     core.setOutput("response", responseJson);
 }
-exports.submitBuildInfo = submitBuildInfo;
+
 async function getAccessToken() {
     const clientId = core.getInput('client-id');
     const clientSecret = core.getInput('client-secret');
-    let tokenBodyData = {
+
+    let tokenBodyData: any = {
         "audience": "api.atlassian.com",
-        "grant_type": "client_credentials",
+        "grant_type":"client_credentials",
         "client_id": clientId || "",
         "client_secret": clientSecret || "",
     };
     tokenBodyData = JSON.stringify(tokenBodyData);
-    const tokenOptions = {
+    
+    const tokenOptions: iTokenOptions = {
         method: 'POST',
         url: 'https://api.atlassian.com/oauth/token',
         headers: {
@@ -105,15 +118,16 @@ async function getAccessToken() {
     console.log("getAccessToken response: ", response);
     return JSON.parse(response);
 }
-exports.getAccessToken = getAccessToken;
+
 (async function () {
     try {
         const accessTokenResponse = await getAccessToken();
         console.log("accessTokenResponse: ", accessTokenResponse);
         await submitBuildInfo(accessTokenResponse.access_token);
         console.log("finished submiting build info");
-    }
-    catch (error) {
+    } catch (error) {
         core.setFailed(error.message);
     }
 })();
+
+export {submitBuildInfo, getAccessToken};
