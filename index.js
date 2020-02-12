@@ -22,11 +22,11 @@ async function submitBuildInfo(accessToken) {
     const testInfoNumSkipped = core.getInput('test-info-num-skipped');
     lastUpdated = dateFormat(lastUpdated, "yyyy-mm-dd'T'HH:MM:ss'Z'");
     console.log("hello");
-    console.log(github.context);
+    console.log(github);
     const buildRef = {
         commit: {
             id: commitId || "",
-            repositoryUri: `${github.context.payload.repository.repository_url}` || buildRefUrl,
+            repositoryUri: `${github.context.payload.repository.url}/actions/runs/${github.run_id}` || buildRefUrl,
         },
         ref: {
             name: "buildRef",
