@@ -31,7 +31,7 @@ async function submitBuildInfo(accessToken: any) {
     const buildRef: iBuildRef = {
         commit: {
             id: commitId || "",
-            repositoryUri: `${github.context.payload.repository.url}/actions/runs/${github.context.run_id}` || buildRefUrl,
+            repositoryUri: github.context.payload.repository.url+'/actions/runs/'+github.context.run_id || buildRefUrl,
         },
         ref: {
             name: "buildRef",
