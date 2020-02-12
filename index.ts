@@ -130,4 +130,4 @@ async function getAccessToken() {
     }
 })();
 
-export default submitBuildInfo;
+export {submitBuildInfo, getAccessToken};

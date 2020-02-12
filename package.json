@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "test": "tsc --noEmit && jest"
+    "test": "tsc --noEmit && jest",
+    "test_no_console_log": "tsc --noEmit && jest --silent",
+    "test_code_coverage": "tsc --noEmit && jest --coverage"
   },
   "repository": {
     "type": "git",
@@ -29,6 +31,7 @@
     "@types/jest": "^25.1.2",
     "@types/node": "^13.7.0",
     "jest": "^25.1.0",
+    "jest-fetch-mock": "^3.0.1",
     "js-yaml": "^3.13.1",
     "nock": "^11.8.2",
     "ts-jest": "^25.2.0",

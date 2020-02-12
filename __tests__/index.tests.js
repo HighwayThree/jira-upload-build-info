@@ -5,9 +5,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 // import * as core from '@actions/core'
 const nock_1 = __importDefault(require("nock"));
-const index_1 = __importDefault(require("../index"));
+const index_1 = require("../index");
+require('jest-fetch-mock').enableMocks();
 beforeEach(() => {
     jest.resetModules();
+    fetchMock.resetMocks();
 });
 afterAll(() => {
     expect(nock_1.default.pendingMocks()).toEqual([]);
@@ -17,8 +19,11 @@ afterAll(() => {
 describe('debug action debug messages', () => {
     it('testing submitDeploymentInfo, no access token, expecting it to throw a reject', async () => {
         const fakeToken = '';
-        await expect(index_1.default(fakeToken)).rejects.toThrow();
+        await expect(index_1.submitBuildInfo(fakeToken)).rejects.toThrow();
     });
-    // it('spy on getInput', async () => {
+    it('testing getAccessTokent, no spyOn', async () => {
+        await expect(index_1.getAccessToken()).rejects.toThrow();
+    });
+    // it('promise resolves', async () => {
     // })
 });
