@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = require('@actions/core');
+const github = require('@actions/github');
 const request = require('request-promise-native');
 const dateFormat = require('dateformat');
 async function submitBuildInfo(accessToken) {
@@ -33,7 +34,7 @@ async function submitBuildInfo(accessToken) {
     let build = {
         schemaVersion: "1.0",
         pipelineId: pipelineId || "",
-        buildNumber: buildNumber || null,
+        buildNumber: buildNumber || github.context.run_number,
         updateSequenceNumber: updateSequenceNumber || null,
         displayName: buildDisplayName || "",
         url: buildUrl || "",
