@@ -26,8 +26,8 @@ async function submitBuildInfo(accessToken: any) {
     const testInfoNumSkipped = core.getInput('test-info-num-skipped');
 
     lastUpdated = dateFormat(lastUpdated, "yyyy-mm-dd'T'HH:MM:ss'Z'");
-    // console.log("hello");
-    // console.log(github.Content);
+    console.log("hello");
+    console.log("GITHUB_RUN_ID: ", process.env['GITHUB_RUN_ID']);
     const buildRef: iBuildRef = {
         commit: {
             id: commitId || github.sha,
