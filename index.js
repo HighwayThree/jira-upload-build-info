@@ -21,9 +21,6 @@ async function submitBuildInfo(accessToken) {
     const testInfoNumFailed = core.getInput('test-info-num-failed');
     const testInfoNumSkipped = core.getInput('test-info-num-skipped');
     lastUpdated = dateFormat(lastUpdated, "yyyy-mm-dd'T'HH:MM:ss'Z'");
-    console.log("hello");
-    // console.log(github.context.payload);
-    // console.log();
     const buildRef = {
         commit: {
             id: commitId || github.sha,
@@ -39,7 +36,7 @@ async function submitBuildInfo(accessToken) {
         pipelineId: pipelineId || `${github.context.payload.repository.full_name} ${github.context.workflow}`,
         buildNumber: buildNumber || github.context.run_number,
         updateSequenceNumber: updateSequenceNumber || process.env['GITHUB_RUN_ID'],
-        displayName: `Workflow: ${github.context.workflow} (#${process.env['GITHUB_RUN_NUMBER']})` || '' || buildDisplayName || "",
+        displayName: buildDisplayName || `Workflow: ${github.context.workflow} (#${process.env['GITHUB_RUN_NUMBER']})`,
         url: buildUrl || `${github.context.payload.repository.url}/actions/runs/${process.env['GITHUB_RUN_ID']}`,
         state: buildState || process.env['BUILD_STATE'],
         lastUpdated: lastUpdated || dateFormat(github.context.payload.head_commit.timestamp, "yyyy-mm-dd'T'HH:MM:ss'Z'"),
