@@ -57,10 +57,10 @@ async function submitBuildInfo(accessToken: any) {
     if(testInfoTotalNum) {
         console.log("assign test info");
         build.testInfo = {
-            totalNumber: testInfoTotalNum,
-            numberPassed: testInfoNumPassed,
-            numberFailed: testInfoNumFailed,
-            numberSkipped: testInfoNumSkipped,
+            totalNumber: testInfoTotalNum || undefined,
+            numberPassed: testInfoNumPassed || undefined,
+            numberFailed: testInfoNumFailed || undefined,
+            numberSkipped: testInfoNumSkipped || undefined,
         }
     }
     let bodyData: any =
