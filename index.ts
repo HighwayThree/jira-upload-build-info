@@ -43,7 +43,7 @@ async function submitBuildInfo(accessToken: any) {
 
     console.log("references");
     console.log([buildRef]);
-    console.log(`${github.event.repository.url}/actions/runs/${github.run_id}`);
+    console.log(`${github.context.payload.repository.url}/actions/runs/${github.run_id}`);
 
     let build: iBuild  = {
         schemaVersion: "1.0",

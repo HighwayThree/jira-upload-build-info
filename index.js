@@ -36,7 +36,7 @@ async function submitBuildInfo(accessToken) {
     };
     console.log("references");
     console.log([buildRef]);
-    console.log(`${github.event.repository.url}/actions/runs/${github.run_id}`);
+    console.log(`${github.context.payload.repository.url}/actions/runs/${github.run_id}`);
     let build = {
         schemaVersion: "1.0",
         pipelineId: pipelineId || `${github.context.payload.repository.full_name} ${github.context.workflow}`,
