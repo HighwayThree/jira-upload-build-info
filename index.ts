@@ -26,17 +26,17 @@ async function submitBuildInfo(accessToken: any) {
     const testInfoNumSkipped = core.getInput('test-info-num-skipped');
 
     lastUpdated = dateFormat(lastUpdated, "yyyy-mm-dd'T'HH:MM:ss'Z'");
-    console.log("updateSequenceNumber");
-    console.log(updateSequenceNumber);
-    console.log(process.env['GITHUB_RUN_ID']);
+    console.log("state");
+    console.log(buildState);
+    console.log(process.env['BUILD_STATE']);
     
     console.log("displayName");
     console.log(buildDisplayName);
-    console.log(`Workflow: ${ github.context.workflow } (#${ process.env['GITHUB_RUN_ID'] })`)
+    console.log(`Workflow: ${ github.context.workflow } (#${ github.context.run_number })`)
 
-    console.log("url");
-    console.log(buildUrl);
-    console.log(`${github.context.payload.repository.url}/actions/runs/${process.env['GITHUB_RUN_ID']}`);
+    console.log("lastUpdated");
+    console.log(lastUpdated);
+    console.log(github.context.payload.head_commit.timestamp);
 
     const buildRef: iBuildRef = {
         commit: {
@@ -53,9 +53,9 @@ async function submitBuildInfo(accessToken: any) {
         schemaVersion: "1.0",
         pipelineId:  pipelineId || `${github.context.payload.repository.full_name} ${github.context.workflow}`,
         buildNumber: buildNumber || github.context.run_number,
-        updateSequenceNumber: updateSequenceNumber || null,
+        updateSequenceNumber: updateSequenceNumber || process.env['GITHUB_RUN_ID'],
         displayName: buildDisplayName || "",
-        url: buildUrl || "",
+        url: buildUrl || `${github.context.payload.repository.url}/actions/runs/${process.env['GITHUB_RUN_ID']}`,
         state: buildState || "",
         lastUpdated: lastUpdated || "",
         issueKeys: issueKeys.split(',') || [],
