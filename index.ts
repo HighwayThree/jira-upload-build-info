@@ -28,7 +28,7 @@ async function submitBuildInfo(accessToken: any) {
     lastUpdated = dateFormat(lastUpdated, "yyyy-mm-dd'T'HH:MM:ss'Z'");
     console.log("hello");
     console.log("GITHUB_RUN_ID: ", process.env['GITHUB_RUN_ID']);
-    console.log(JSON.stringify(github.context));
+    console.log(github.context.toJson());
     const buildRef: iBuildRef = {
         commit: {
             id: commitId || github.sha,
