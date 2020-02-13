@@ -23,10 +23,11 @@ async function submitBuildInfo(accessToken) {
     lastUpdated = dateFormat(lastUpdated, "yyyy-mm-dd'T'HH:MM:ss'Z'");
     console.log("hello");
     console.log("GITHUB_RUN_ID: ", process.env['GITHUB_RUN_ID']);
+    console.log(JSON.stringify(github.context));
     const buildRef = {
         commit: {
             id: commitId || github.sha,
-            repositoryUri: `${github.context.payload.repository.url}/actions/runs/${github.context.run_id}` || buildRefUrl,
+            repositoryUri: `${github.context.payload.repository.url}/actions/runs/${process.env['GITHUB_RUN_ID']}` || buildRefUrl,
         },
         ref: {
             name: "buildRef",
