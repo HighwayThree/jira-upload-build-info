@@ -24,12 +24,6 @@ async function submitBuildInfo(accessToken) {
     console.log("hello");
     // console.log(github.context.payload);
     // console.log();
-    console.log("displayName");
-    console.log(buildDisplayName);
-    console.log(github.context.run_number);
-    console.log("lastUpdated");
-    console.log(lastUpdated);
-    console.log(dateFormat(github.context.payload.head_commit.timestamp, "yyyy-mm-dd'T'HH:MM:ss'Z'"));
     const buildRef = {
         commit: {
             id: commitId || github.sha,
@@ -40,19 +34,21 @@ async function submitBuildInfo(accessToken) {
             uri: buildRefUrl || `${github.context.payload.repository.url}/actions/runs/${process.env['GITHUB_RUN_ID']}`,
         },
     };
+    console.log("references");
+    console.log([buildRef]);
+    console.log(`${github.event.repository.url}/actions/runs/${github.run_id}`);
     let build = {
         schemaVersion: "1.0",
         pipelineId: pipelineId || `${github.context.payload.repository.full_name} ${github.context.workflow}`,
-        buildNumber: github.context.run_number || '' || buildNumber,
+        buildNumber: buildNumber || github.context.run_number,
         updateSequenceNumber: updateSequenceNumber || process.env['GITHUB_RUN_ID'],
-        displayName: buildDisplayName || "",
+        displayName: `Workflow: ${github.context.workflow} (#${github.context.run_number})` || '' || buildDisplayName || "",
         url: buildUrl || `${github.context.payload.repository.url}/actions/runs/${process.env['GITHUB_RUN_ID']}`,
         state: buildState || process.env['BUILD_STATE'],
-        lastUpdated: lastUpdated || "",
+        lastUpdated: lastUpdated || dateFormat(github.context.payload.head_commit.timestamp, "yyyy-mm-dd'T'HH:MM:ss'Z'"),
         issueKeys: issueKeys.split(',') || [],
         references: [buildRef] || [],
     };
-    console.log("buildNumber: " + build.buildNumber);
     console.log("build.state: " + build.state);
     console.log("testInfoTotalNum: " + testInfoTotalNum);
     if (testInfoTotalNum) {
