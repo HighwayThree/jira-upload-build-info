@@ -27,8 +27,8 @@ async function submitBuildInfo(accessToken: any) {
 
     lastUpdated = dateFormat(lastUpdated, "yyyy-mm-dd'T'HH:MM:ss'Z'");
     console.log("hello");
-    console.log(github.context.payload);
-    console.log();
+    // console.log(github.context.payload);
+    // console.log();
     
     console.log("displayName");
     console.log(buildDisplayName);
@@ -36,7 +36,7 @@ async function submitBuildInfo(accessToken: any) {
 
     console.log("lastUpdated");
     console.log(lastUpdated);
-    console.log(github.context.payload.head_commit.timestamp);
+    console.log(dateFormat(github.context.payload.head_commit.timestamp, "yyyy-mm-dd'T'HH:MM:ss'Z'"));
 
     const buildRef: iBuildRef = {
         commit: {
@@ -52,7 +52,7 @@ async function submitBuildInfo(accessToken: any) {
     let build: iBuild  = {
         schemaVersion: "1.0",
         pipelineId:  pipelineId || `${github.context.payload.repository.full_name} ${github.context.workflow}`,
-        buildNumber: buildNumber || github.context.run_number,
+        buildNumber: github.context.run_number || '' || buildNumber,
         updateSequenceNumber: updateSequenceNumber || process.env['GITHUB_RUN_ID'],
         displayName: buildDisplayName || "",
         url: buildUrl || `${github.context.payload.repository.url}/actions/runs/${process.env['GITHUB_RUN_ID']}`,
@@ -61,6 +61,7 @@ async function submitBuildInfo(accessToken: any) {
         issueKeys: issueKeys.split(',') || [],
         references: [buildRef] || [],
     };
+    console.log("buildNumber: " + build.buildNumber);
     console.log("build.state: " + build.state);
 
     console.log("testInfoTotalNum: " + testInfoTotalNum);
