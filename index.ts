@@ -26,17 +26,26 @@ async function submitBuildInfo(accessToken: any) {
     const testInfoNumSkipped = core.getInput('test-info-num-skipped');
 
     lastUpdated = dateFormat(lastUpdated, "yyyy-mm-dd'T'HH:MM:ss'Z'");
-    console.log("hello");
-    console.log("GITHUB_RUN_ID: ", process.env['GITHUB_RUN_ID']);
-    console.log(JSON.stringify(github.context));
+    console.log("updateSequenceNumber");
+    console.log(updateSequenceNumber);
+    console.log(process.env['GITHUB_RUN_ID']);
+    
+    console.log("displayName");
+    console.log(buildDisplayName);
+    console.log(`Workflow: ${ github.context.workflow } (#${ process.env['GITHUB_RUN_ID'] })`)
+
+    console.log("url");
+    console.log(buildUrl);
+    console.log(`${github.context.payload.repository.url}/actions/runs/${process.env['GITHUB_RUN_ID']}`);
+
     const buildRef: iBuildRef = {
         commit: {
             id: commitId || github.sha,
-            repositoryUri: `${github.context.payload.repository.url}/actions/runs/${process.env['GITHUB_RUN_ID']}` || buildRefUrl, //github.context.run_id = undefined
+            repositoryUri: buildRefUrl || `${github.context.payload.repository.url}/actions/runs/${process.env['GITHUB_RUN_ID']}`,
         },
         ref: {
             name: "buildRef",
-            uri: buildRefUrl || "",
+            uri: buildRefUrl || `${github.context.payload.repository.url}/actions/runs/${process.env['GITHUB_RUN_ID']}`,
         },
     };
 
