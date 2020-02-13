@@ -26,7 +26,7 @@ async function submitBuildInfo(accessToken) {
     const buildRef = {
         commit: {
             id: commitId || github.sha,
-            repositoryUri: buildRefUrl || `${github.context.payload.repository.url}/actions/runs/${github.context.run_id}`,
+            repositoryUri: `${github.context.payload.repository.url}/actions/runs/${github.context.run_id}` || buildRefUrl,
         },
         ref: {
             name: "buildRef",
@@ -36,7 +36,7 @@ async function submitBuildInfo(accessToken) {
     let build = {
         schemaVersion: "1.0",
         pipelineId: pipelineId || `${github.context.payload.repository.full_name} ${github.context.workflow}`,
-        buildNumber: github.context.run_number || buildNumber,
+        buildNumber: buildNumber || github.context.run_number,
         updateSequenceNumber: updateSequenceNumber || null,
         displayName: buildDisplayName || "",
         url: buildUrl || "",
