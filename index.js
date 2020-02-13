@@ -34,15 +34,12 @@ async function submitBuildInfo(accessToken) {
             uri: buildRefUrl || `${github.context.payload.repository.url}/actions/runs/${process.env['GITHUB_RUN_ID']}`,
         },
     };
-    console.log("references");
-    console.log([buildRef]);
-    console.log([`${github.context.payload.repository.url}/actions/runs/${process.env['GITHUB_RUN_ID']}`]);
     let build = {
         schemaVersion: "1.0",
         pipelineId: pipelineId || `${github.context.payload.repository.full_name} ${github.context.workflow}`,
         buildNumber: buildNumber || github.context.run_number,
         updateSequenceNumber: updateSequenceNumber || process.env['GITHUB_RUN_ID'],
-        displayName: 'Workflow: ' + github.context.workflow + ' (#' + github.context.run_number + ')' || '' || buildDisplayName || "",
+        displayName: `Workflow: ${github.context.workflow} (#${process.env['GITHUB_RUN_NUMBER']})` || '' || buildDisplayName || "",
         url: buildUrl || `${github.context.payload.repository.url}/actions/runs/${process.env['GITHUB_RUN_ID']}`,
         state: buildState || process.env['BUILD_STATE'],
         lastUpdated: lastUpdated || dateFormat(github.context.payload.head_commit.timestamp, "yyyy-mm-dd'T'HH:MM:ss'Z'"),
