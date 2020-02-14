@@ -10,9 +10,10 @@ const dateFormat = require('dateformat');
 
 async function submitBuildInfo(accessToken: any) {
     const cloudInstanceBaseUrl = core.getInput('cloud-instance-base-url');
-    const cloudId = (await request(cloudInstanceBaseUrl + '_edge/tenant_info')).cloudId;
+    const cloudId = await request(cloudInstanceBaseUrl + '_edge/tenant_info');
     console.log("hello");
     console.log(cloudId);
+    console.log(cloudId.cloudId);
 
     const pipelineId = core.getInput('pipeline-id');
     const buildNumber = core.getInput('build-number');
