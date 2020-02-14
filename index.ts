@@ -12,8 +12,16 @@ async function submitBuildInfo(accessToken: any) {
     const cloudInstanceBaseUrl = core.getInput('cloud-instance-base-url');
     const cloudId = await request(cloudInstanceBaseUrl + '_edge/tenant_info');
     console.log("hello");
-    console.log(cloudId);
-    console.log(cloudId.cloudId);
+    try{
+        console.log(cloudId);
+        console.log(JSON.stringify(cloudId));
+        console.log(JSON.parse(cloudId));
+        console.log(cloudId.cloudId);
+    }
+    catch(e){
+        console.log(e);
+    }
+
 
     const pipelineId = core.getInput('pipeline-id');
     const buildNumber = core.getInput('build-number');
