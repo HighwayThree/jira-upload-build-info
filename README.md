@@ -1,6 +1,6 @@
 # Jira Upload Build Info
 
-This Github Action is used to upload build information to specified Jira issues belonging to a connected Jira Cloud instance via the Jira Software REST API. 
+This Github Action uploads build information to specified Jira issues belonging to a connected Jira Cloud instance via the Jira Software REST API. 
 
 ## Requirements
 
