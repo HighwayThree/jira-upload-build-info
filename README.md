@@ -74,3 +74,7 @@ If `these` job specific variables are not specified in the user's .yml file, the
 - `commit-id:` '${{ github.sha }}'
 - `repo-url`: '${{ github.event.repository.url }}'
 - `build-ref-url`: '${{ github.event.repository.url }}/actions/runs/${{ github.run_id }}'
+- `test-info-total-num`: 
+- `test-info-num-passed`: 
+- `test-info-num-failed`: 
+- `test-info-num-skipped`: 
