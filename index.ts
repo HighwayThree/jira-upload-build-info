@@ -15,9 +15,6 @@ async function submitBuildInfo(accessToken: any) {
     try{
         console.log(cloudId);
         console.log(cloudId["cloudId"]);
-        let hi = JSON.parse(cloudId);
-        console.log(hi);
-        console.log(hi.cloudId);
         console.log(cloudId.cloudId);
     }
     catch(e){
