@@ -46,11 +46,11 @@ For more information on Github Environment Variables, see https://help.github.co
 
 ```
 uses: HighwayThree/jira-upload-build-info@master
-      with:
-        client-id: '${{ secrets.CLIENT_ID }}'
-        client-secret: '${{ secrets.CLIENT_SECRET }}'
-        cloud-instance-base-url: '${{ secrets.CLOUD_INSTANCE_BASE_URL }}'
-        issue-keys: "${{ steps.jira_keys.outputs.jira-keys }}"
+with:
+  client-id: '${{ secrets.CLIENT_ID }}'
+  client-secret: '${{ secrets.CLIENT_SECRET }}'
+  cloud-instance-base-url: '${{ secrets.CLOUD_INSTANCE_BASE_URL }}'
+  issue-keys: "${{ steps.jira_keys.outputs.jira-keys }}"
 ```
 
 - `client-id` - Access token found in OAth credentials of your Jira Cloud website.
