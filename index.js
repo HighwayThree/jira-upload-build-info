@@ -10,8 +10,7 @@ async function submitBuildInfo(accessToken) {
     console.log("hello");
     try {
         console.log(cloudId);
-        console.log(cloudId["cloudId"]);
-        console.log(cloudId.cloudId);
+        console.log(JSON.parse(cloudId));
     }
     catch (e) {
         console.log(e);
