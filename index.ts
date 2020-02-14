@@ -10,7 +10,7 @@ const dateFormat = require('dateformat');
 
 async function submitBuildInfo(accessToken: any) {
     const cloudInstanceBaseUrl = core.getInput('cloud-instance-base-url');
-    const cloudId = await request(cloudInstanceBaseUrl + '_edge/tenant_info');
+    const cloudId = (await request(cloudInstanceBaseUrl + '_edge/tenant_info')).cloudId;
     console.log("hello");
     console.log(cloudId);
 
