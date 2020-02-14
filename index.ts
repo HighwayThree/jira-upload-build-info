@@ -9,7 +9,11 @@ const request = require('request-promise-native');
 const dateFormat = require('dateformat');
 
 async function submitBuildInfo(accessToken: any) {
-    const cloudId = core.getInput('cloud-id');
+    const cloudInstanceBaseUrl = core.getInput('cloud-instance-base-url');
+    const cloudId = await request(cloudInstanceBaseUrl);
+    console.log("hello");
+    console.log(cloudId);
+
     const pipelineId = core.getInput('pipeline-id');
     const buildNumber = core.getInput('build-number');
     const buildDisplayName = core.getInput('build-display-name');
