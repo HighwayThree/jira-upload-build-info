@@ -73,6 +73,7 @@ If `these` job specific variables are not specified in the user's .yml file, the
 - `build-url`: '${{github.event.repository.url}}/actions/runs/${{github.run_id}}'
 - `update-sequence-number`: '${{ github.run_id }}'
 - `last-updated`: '${{github.event.head_commit.timestamp}}'
+  - the date-time format for last-updated is yyyy-mm-dd'T'HH:MM:ss'Z'
 - `commit-id:` '${{ github.sha }}'
 - `repo-url`: '${{ github.event.repository.url }}'
 - `build-ref-url`: '${{ github.event.repository.url }}/actions/runs/${{ github.run_id }}'
