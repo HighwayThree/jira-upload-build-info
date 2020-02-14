@@ -84,3 +84,8 @@ If `these` job specific variables are not specified in the user's .yml file, the
 ### Output value
 
 - `response` - The JSON response to POSTing the build information to Jira Cloud
+
+## Usage
+
+An example of a pipeline using this actino can be found at: 
+> https://github.com/HighwayThree/jira-github-action-integration-demo/blob/master/.github/workflows/ci.yml
