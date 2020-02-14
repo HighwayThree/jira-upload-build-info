@@ -30,6 +30,8 @@ Navigate to `Github Repository -> Settings -> Secrets` if you do not already hav
 
 ## Action Specifications
 
+### Input values
+
 #### Required
 
 Inside your .yml file there should be something that looks like these required variables:
@@ -78,3 +80,7 @@ If `these` job specific variables are not specified in the user's .yml file, the
 - `test-info-num-passed`: 
 - `test-info-num-failed`: 
 - `test-info-num-skipped`: 
+
+### Output value
+
+- `response` - The JSON response to POSTing the build information to Jira Cloud
