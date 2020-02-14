@@ -14,7 +14,10 @@ async function submitBuildInfo(accessToken: any) {
     console.log("hello");
     try{
         console.log(cloudId);
-        console.log(JSON.parse(cloudId));
+        const hi = JSON.parse(cloudId);
+        console.log(hi);
+        console.log(hi.cloudId);
+        console.log(hi["cloudId"]);
     }
     catch(e){
         console.log(e);
