@@ -25,7 +25,8 @@
     "@actions/github": "^2.0.1",
     "dateformat": "^3.0.3",
     "request": "^2.88.0",
-    "request-promise-native": "^1.0.8"
+    "request-promise-native": "^1.0.8",
+    "upload-build-upload-deployment-token-retrieval-logic": "file:../upload-build-upload-deployment-token-retrieval-logic"
   },
   "devDependencies": {
     "@types/jest": "^25.1.2",

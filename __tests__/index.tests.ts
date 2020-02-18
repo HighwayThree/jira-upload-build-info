@@ -1,6 +1,6 @@
 // import * as core from '@actions/core'
 import nock from 'nock'
-import {submitBuildInfo, getAccessToken} from "../index";
+import {submitBuildInfo} from "../index";
 require('jest-fetch-mock').enableMocks()
 
  beforeEach( () => {
@@ -20,9 +20,9 @@ describe('debug action debug messages', () => {
     const fakeToken = '';
     await expect(submitBuildInfo(fakeToken)).rejects.toThrow();
   })
-  it('testing getAccessTokent, no spyOn', async () => {
-    await expect(getAccessToken()).rejects.toThrow();
-  })
+  // it('testing getAccessTokent, no spyOn', async () => {
+  //   await expect(getAccessToken()).rejects.toThrow();
+  // })
   // it('promise resolves', async () => {
 
   // })

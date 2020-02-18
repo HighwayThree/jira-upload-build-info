@@ -21,9 +21,9 @@ describe('debug action debug messages', () => {
         const fakeToken = '';
         await expect(index_1.submitBuildInfo(fakeToken)).rejects.toThrow();
     });
-    it('testing getAccessTokent, no spyOn', async () => {
-        await expect(index_1.getAccessToken()).rejects.toThrow();
-    });
+    // it('testing getAccessTokent, no spyOn', async () => {
+    //   await expect(getAccessToken()).rejects.toThrow();
+    // })
     // it('promise resolves', async () => {
     // })
 });
