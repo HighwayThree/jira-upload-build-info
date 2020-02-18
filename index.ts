@@ -49,7 +49,7 @@ async function submitBuildInfo(accessToken: any) {
         displayName: buildDisplayName || `Workflow: ${ github.context.workflow } (#${ process.env['GITHUB_RUN_NUMBER'] })`,
         url: buildUrl || `${github.context.payload.repository.url}/actions/runs/${process.env['GITHUB_RUN_ID']}`,
         state: buildState || process.env['BUILD_STATE'],
-        lastUpdated: lastUpdated || dateFormat(github.context.payload.head_commit.timestamp, "yyyy-mm-dd'T'HH:MM:ss'Z'"),
+        lastUpdated: core.getInput('last-updated') || lastUpdated || dateFormat(github.context.payload.head_commit.timestamp, "yyyy-mm-dd'T'HH:MM:ss'Z'"),
         issueKeys: issueKeys.split(',') || [],
         references: [buildRef] || [],
     };
