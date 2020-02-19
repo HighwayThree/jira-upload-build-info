@@ -61,8 +61,19 @@ async function submitBuildInfo(accessToken) {
     let bodyData = {
         builds: [build]
     };
-    console.log("bodyData: " + JSON.stringify(bodyData));
-    let responseJson = await token.getOptionsResponse(cloudId, accessToken, bodyData);
+    bodyData = JSON.stringify(bodyData);
+    console.log("bodyData: " + bodyData);
+    const options = {
+        method: 'POST',
+        url: "https://api.atlassian.com/jira/builds/0.1/cloud/" + cloudId + "/bulk",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: "Bearer " + accessToken,
+        },
+        body: bodyData,
+    };
+    let responseJson = await request(options);
     let response = JSON.parse(responseJson);
     if (response.rejectedBuilds && response.rejectedBuilds.length > 0) {
         const rejectedBuild = response.rejectedBuilds[0];
