@@ -1,5 +1,6 @@
 import { iBuild } from "./interfaces/iBuild";
-import { iBuildRef } from "./interfaces/iBuildRef"
+import { iBuildRef } from "./interfaces/iBuildRef";
+import { iOptions } from "./interfaces/iOptions";
 
 const core = require('@actions/core');
 const github = require('@actions/github');
@@ -70,9 +71,21 @@ async function submitBuildInfo(accessToken: any) {
         builds: [build]
     };
 
-    console.log("bodyData: " + JSON.stringify(bodyData));
+    bodyData = JSON.stringify(bodyData);
+    console.log("bodyData: " + bodyData);
 
-    let responseJson = await token.getOptionsResponse(cloudId, accessToken, bodyData);
+    const options: iOptions = {
+        method: 'POST',
+        url: "https://api.atlassian.com/jira/builds/0.1/cloud/" + cloudId + "/bulk",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            Authorization:"Bearer " + accessToken,
+        },
+        body: bodyData,
+    }
+
+    let responseJson = await request(options);
     let response = JSON.parse(responseJson);
     if(response.rejectedBuilds && response.rejectedBuilds.length > 0) {
         const rejectedBuild = response.rejectedBuilds[0];
