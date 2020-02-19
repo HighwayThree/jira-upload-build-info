@@ -1,8 +1,8 @@
 name: 'Jira Upload Build Info'
 description: 'Github Action to upload build info associated with a Jira issue key to Jira Software REST API'
 inputs:
-  cloud-id:
-    description: 'Jira cloud id'
+  cloud-instance-base-url:
+    description: 'Jira cloud url'
     required: true
   client-id:
     description: 'jira oauth client id'
@@ -12,37 +12,37 @@ inputs:
     required: true
   pipeline-id:
     description: ''
-    required: true
+    required: false
   build-number:
     description: ''
-    required: true
+    required: false
   build-display-name:
     description: ''
-    required: true
+    required: false
   build-state:
     description: ''
-    required: true
+    required: false
   build-url:
     description: ''
-    required: true
+    required: false
   update-sequence-number:
     description: ''
-    required: true
+    required: false
   last-updated:
     description: ''
-    required: true
+    required: false
   issue-keys:
     description: 'comma delimited list of jira keys'
     required: true
   commit-id:
     description: ''
-    required: true
+    required: false
   repo-url:
     description: ''
-    required: true
+    required: false
   build-ref-url:
     description: ''
-    required: true
+    required: false
   test-info-total-num:
     description: ''
     required: false

@@ -1,10 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = require('@actions/core');
+const github = require('@actions/github');
 const request = require('request-promise-native');
 const dateFormat = require('dateformat');
 async function submitBuildInfo(accessToken) {
-    const cloudId = core.getInput('cloud-id');
+    const cloudInstanceBaseUrl = core.getInput('cloud-instance-base-url');
+    let cloudId = await request(cloudInstanceBaseUrl + '/_edge/tenant_info');
+    cloudId = JSON.parse(cloudId);
+    cloudId = cloudId.cloudId;
     const pipelineId = core.getInput('pipeline-id');
     const buildNumber = core.getInput('build-number');
     const buildDisplayName = core.getInput('build-display-name');
@@ -22,23 +26,23 @@ async function submitBuildInfo(accessToken) {
     lastUpdated = dateFormat(lastUpdated, "yyyy-mm-dd'T'HH:MM:ss'Z'");
     const buildRef = {
         commit: {
-            id: commitId || "",
-            repositoryUri: buildRefUrl || "",
+            id: commitId || github.sha || github.context.sha,
+            repositoryUri: buildRefUrl || `${github.context.payload.repository.url}/actions/runs/${process.env['GITHUB_RUN_ID']}`,
         },
         ref: {
             name: "buildRef",
-            uri: buildRefUrl || "",
+            uri: buildRefUrl || `${github.context.payload.repository.url}/actions/runs/${process.env['GITHUB_RUN_ID']}`,
         },
     };
     let build = {
         schemaVersion: "1.0",
-        pipelineId: pipelineId || "",
-        buildNumber: buildNumber || null,
-        updateSequenceNumber: updateSequenceNumber || null,
-        displayName: buildDisplayName || "",
-        url: buildUrl || "",
-        state: buildState || "",
-        lastUpdated: lastUpdated || "",
+        pipelineId: pipelineId || `${github.context.payload.repository.full_name} ${github.context.workflow}`,
+        buildNumber: buildNumber || process.env['GITHUB_RUN_NUMBER'] || '',
+        updateSequenceNumber: updateSequenceNumber || process.env['GITHUB_RUN_ID'],
+        displayName: buildDisplayName || `Workflow: ${github.context.workflow} (#${process.env['GITHUB_RUN_NUMBER']})`,
+        url: buildUrl || `${github.context.payload.repository.url}/actions/runs/${process.env['GITHUB_RUN_ID']}`,
+        state: buildState || process.env['BUILD_STATE'],
+        lastUpdated: lastUpdated || dateFormat(github.context.payload.head_commit.timestamp, "yyyy-mm-dd'T'HH:MM:ss'Z'"),
         issueKeys: issueKeys.split(',') || [],
         references: [buildRef] || [],
     };
@@ -47,10 +51,10 @@ async function submitBuildInfo(accessToken) {
     if (testInfoTotalNum) {
         console.log("assign test info");
         build.testInfo = {
-            totalNumber: testInfoTotalNum,
-            numberPassed: testInfoNumPassed,
-            numberFailed: testInfoNumFailed,
-            numberSkipped: testInfoNumSkipped,
+            totalNumber: testInfoTotalNum || undefined,
+            numberPassed: testInfoNumPassed || undefined,
+            numberFailed: testInfoNumFailed || undefined,
+            numberSkipped: testInfoNumSkipped || undefined,
         };
     }
     let bodyData = {

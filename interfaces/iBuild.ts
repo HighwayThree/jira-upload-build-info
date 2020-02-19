@@ -9,10 +9,10 @@ export interface iBuild {
     lastUpdated: string
     issueKeys: any []
     testInfo?: {
-        totalNumber?: number
-        numberPassed?: number
-        numberFailed?: number
-        numberSkipped?: number
+        totalNumber?: number | string | undefined
+        numberPassed?: number | string | undefined
+        numberFailed?: number | string | undefined
+        numberSkipped?: number | string | undefined
     }
     references: any []
 }
