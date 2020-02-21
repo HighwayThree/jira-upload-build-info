@@ -1,9 +1,8 @@
-const core = require('@actions/core');
 const request = require('request-promise-native');
 
-async function getAccessToken() {
-    const clientId = core.getInput('client-id');
-    const clientSecret = core.getInput('client-secret');
+var exports = module.exports={};
+
+exports.getAccessToken = async function (clientId, clientSecret) {
 
     let tokenBodyData = {
         "audience": "api.atlassian.com",
@@ -26,6 +25,4 @@ async function getAccessToken() {
     const response = await request(tokenOptions);
     console.log("getAccessToken response: ", response);
     return JSON.parse(response);
-}
-
-module.exports.getAccessToken = getAccessToken;
+};

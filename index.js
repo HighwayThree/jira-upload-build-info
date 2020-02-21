@@ -88,7 +88,9 @@ async function submitBuildInfo(accessToken) {
 exports.submitBuildInfo = submitBuildInfo;
 (async function () {
     try {
-        const accessTokenResponse = await token.getAccessToken();
+        const clientId = core.getInput('client-id');
+        const clientSecret = core.getInput('client-secret');
+        const accessTokenResponse = await token.getAccessToken(clientId, clientSecret);
         console.log("accessTokenResponse: ", accessTokenResponse);
         await submitBuildInfo(accessTokenResponse.access_token);
         console.log("finished submiting build info");
