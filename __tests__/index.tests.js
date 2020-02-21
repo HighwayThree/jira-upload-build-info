@@ -8,7 +8,6 @@ const nock_1 = __importDefault(require("nock"));
 const index_1 = require("../index");
 require('jest-fetch-mock').enableMocks();
 // const core = require('@actions/core');
-
 beforeEach(() => {
     jest.resetModules();
     fetchMock.resetMocks();
