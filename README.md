@@ -16,7 +16,7 @@ Make sure these two are connected. To do this, in Jira Cloud go to  `Settings ->
 #### Action Secrets
 This action requires two secrets to be stored in GitHub. These can be named whatever you want, but for this example they will be `CLIENT_ID` and `CLIENT_SECRET` to go with the required inputs for this action.
 
-In Jira Cloud, navigate to `Settings -> Apps -> OAth credentials`. If you do not have credentials set up to your GitHub account already, create new credentials. The App name can be anything, the Server base URL and Logo URL can be your GitHub account: i.e. https://github.com/your-github-account. Set permissions as Developyments: allowed, Builds: allowed, and Development Informaiton: allowed.
+In Jira Cloud, navigate to `Settings -> Apps -> OAth credentials`. If you do not have credentials set up to your GitHub account already, create new credentials. The App name can be anything, the Server base URL and Logo URL can be your GitHub account: i.e. https://<span></span>github.com/your-github-account. Set permissions as Delopyments: allowed, Builds: allowed, and Development Information: allowed.
 
 `CLIENT_ID` is the Client ID generated in OAth credentials.
 
@@ -63,20 +63,44 @@ with:
 If `these` job specific variables are not specified in the user's .yml file, then they are given the 'default values' seen below by the action.
 
 - `pipeline-id`: '${{ github.repository }} ${{ github.workflow }}'
+  - '${{ github.repository }} ${{ github.workflow }}' = user/test-jira-github-actions-demo CI
+  - Can be any string
 - `build-number`: ${{ github.run_number }}
+  - ${{ github.run_number }} = 100
+  - Can be any number
 - `build-display-name`: 'Workflow: ${{ github.workflow }} (#${{ github.run_number }})'
+  - 'Workflow: ${{ github.workflow }} (#${{ github.run_number }})' = Workflow: CI (#100)
+  - Can be any string
 - `build-state`: "${{ env.BUILD_STATE }}"
+   - "${{ env.BUILD_STATE }}" = successful
+   - Can be any string
 - `build-url`: '${{github.event.repository.url}}/actions/runs/${{github.run_id}}'
+  - '${{github.event.repository.url}}/actions/runs/${{github.run_id}}' = https://<span></span>github.com/user/test-jira-github-actions-demo/actions/runs/12345678
+  - Can be any string
 - `update-sequence-number`: '${{ github.run_id }}'
+  - '${{ github.run_id }}' = '12345678'
+  - Can be any string
 - `last-updated`: '${{github.event.head_commit.timestamp}}'
   - the date-time format for last-updated is yyyy-mm-dd'T'HH:MM:ss'Z'
+  - Example Input: 2020-01-01T00:01:00-08:00
+  - Example Output: 2020-01-01T08:01:00Z
 - `commit-id:` '${{ github.sha }}'
+  - See the commit ID under GitHub commit
+  - Can be any string
 - `repo-url`: '${{ github.event.repository.url }}'
+  - https://<span></span>github.com/user/test-jira-github-actions-demo
+  - Can be any string
 - `build-ref-url`: '${{ github.event.repository.url }}/actions/runs/${{ github.run_id }}'
+  - '${{github.event.repository.url}}/actions/runs/${{github.run_id}}' = https://<span></span>github.com/user/test-jira-github-actions-demo/actions/runs/12345678
+  - Can be any string
 - `test-info-total-num`: 
+  - Can be any number or string
 - `test-info-num-passed`: 
+  - Can be any number or string
 - `test-info-num-failed`: 
+  - Can be any number or string
 - `test-info-num-skipped`: 
+  - Can be any number or string
 
 ### Output value
 
@@ -84,5 +108,5 @@ If `these` job specific variables are not specified in the user's .yml file, the
 
 ## Usage
 
-An example of a pipeline using this actino can be found at: 
+An example of a pipeline using this action can be found at: 
 > https://github.com/HighwayThree/jira-github-action-integration-demo/blob/master/.github/workflows/ci.yml
