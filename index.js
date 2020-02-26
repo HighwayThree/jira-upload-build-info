@@ -11,6 +11,8 @@ async function submitBuildInfo(accessToken) {
     const cloudURL = new URL('/_edge/tenant_info', cloudInstanceBaseUrl);
     console.log("hi");
     console.log(cloudURL);
+    console.log(cloudURL.href);
+    console.log(cloudURL.toString());
     let cloudId = await request(cloudURL);
     console.log("Hello");
     console.log(cloudURL);
