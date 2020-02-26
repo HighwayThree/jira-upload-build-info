@@ -4,9 +4,11 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 const request = require('request-promise-native');
 const dateFormat = require('dateformat');
+const token = require('@highwaythree/jira-github-actions-common');
 async function submitBuildInfo(accessToken) {
     const cloudInstanceBaseUrl = core.getInput('cloud-instance-base-url');
-    let cloudId = await request(cloudInstanceBaseUrl + '/_edge/tenant_info');
+    const cloudURL = new URL('/_edge/tenant_info', cloudInstanceBaseUrl);
+    let cloudId = await request(cloudURL.href);
     cloudId = JSON.parse(cloudId);
     cloudId = cloudId.cloudId;
     const pipelineId = core.getInput('pipeline-id');
@@ -85,34 +87,11 @@ async function submitBuildInfo(accessToken) {
     core.setOutput("response", responseJson);
 }
 exports.submitBuildInfo = submitBuildInfo;
-async function getAccessToken() {
-    const clientId = core.getInput('client-id');
-    const clientSecret = core.getInput('client-secret');
-    let tokenBodyData = {
-        "audience": "api.atlassian.com",
-        "grant_type": "client_credentials",
-        "client_id": clientId || "",
-        "client_secret": clientSecret || "",
-    };
-    tokenBodyData = JSON.stringify(tokenBodyData);
-    const tokenOptions = {
-        method: 'POST',
-        url: 'https://api.atlassian.com/oauth/token',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: tokenBodyData,
-    };
-    console.log("tokenOptions: ", tokenOptions);
-    const response = await request(tokenOptions);
-    console.log("getAccessToken response: ", response);
-    return JSON.parse(response);
-}
-exports.getAccessToken = getAccessToken;
 (async function () {
     try {
-        const accessTokenResponse = await getAccessToken();
+        const clientId = core.getInput('client-id');
+        const clientSecret = core.getInput('client-secret');
+        const accessTokenResponse = await token.getAccessToken(clientId, clientSecret);
         console.log("accessTokenResponse: ", accessTokenResponse);
         await submitBuildInfo(accessTokenResponse.access_token);
         console.log("finished submiting build info");

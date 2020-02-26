@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// import * as core from '@actions/core'
 const nock_1 = __importDefault(require("nock"));
 const index_1 = require("../index");
 require('jest-fetch-mock').enableMocks();
@@ -21,9 +20,4 @@ describe('debug action debug messages', () => {
         const fakeToken = '';
         await expect(index_1.submitBuildInfo(fakeToken)).rejects.toThrow();
     });
-    it('testing getAccessTokent, no spyOn', async () => {
-        await expect(index_1.getAccessToken()).rejects.toThrow();
-    });
-    // it('promise resolves', async () => {
-    // })
 });
