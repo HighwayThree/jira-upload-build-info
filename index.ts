@@ -10,22 +10,8 @@ const token = require('@highwaythree/jira-github-actions-common');
 
 async function submitBuildInfo(accessToken: any) {
     const cloudInstanceBaseUrl = core.getInput('cloud-instance-base-url');
-    console.log("yo there");
     const cloudURL = new URL('/_edge/tenant_info', cloudInstanceBaseUrl);
-    console.log("hi");
-    console.log(cloudURL);
-    console.log(cloudURL.href);
-    console.log(cloudURL.toString());
     let cloudId = await request(cloudURL.href);
-    console.log("Hello");
-    console.log(cloudURL);
-    console.log(cloudId);
-    // if(cloudInstanceBaseUrl.length > 0 && cloudInstanceBaseUrl.charAt(cloudInstanceBaseUrl.length-1) == '/'){
-    //     cloudId = await request(cloudInstanceBaseUrl + '_edge/tenant_info');
-    // }
-    // else{
-    //     cloudId = await request(cloudInstanceBaseUrl + '/_edge/tenant_info');
-    // }
     cloudId = JSON.parse(cloudId);
     cloudId = cloudId.cloudId;
     const pipelineId = core.getInput('pipeline-id');
