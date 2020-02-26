@@ -16,7 +16,7 @@ async function submitBuildInfo(accessToken: any) {
     console.log(cloudURL);
     console.log(cloudURL.href);
     console.log(cloudURL.toString());
-    let cloudId = await request(cloudURL);
+    let cloudId = await request(cloudURL.href);
     console.log("Hello");
     console.log(cloudURL);
     console.log(cloudId);
