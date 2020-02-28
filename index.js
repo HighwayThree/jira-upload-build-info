@@ -48,10 +48,8 @@ async function submitBuildInfo(accessToken) {
         issueKeys: issueKeys.split(',') || [],
         references: [buildRef] || [],
     };
-    console.log("build.state: " + build.state);
-    console.log("testInfoTotalNum: " + testInfoTotalNum);
     if (testInfoTotalNum) {
-        console.log("assign test info");
+        // console.log("assign test info");
         build.testInfo = {
             totalNumber: testInfoTotalNum || undefined,
             numberPassed: testInfoNumPassed || undefined,
@@ -63,7 +61,6 @@ async function submitBuildInfo(accessToken) {
         builds: [build]
     };
     bodyData = JSON.stringify(bodyData);
-    console.log("bodyData: " + bodyData);
     const options = {
         method: 'POST',
         url: "https://api.atlassian.com/jira/builds/0.1/cloud/" + cloudId + "/bulk",
@@ -78,10 +75,10 @@ async function submitBuildInfo(accessToken) {
     let response = JSON.parse(responseJson);
     if (response.rejectedBuilds && response.rejectedBuilds.length > 0) {
         const rejectedBuild = response.rejectedBuilds[0];
-        console.log("errors: ", rejectedBuild.errors);
+        // console.log("errors: ", rejectedBuild.errors);
         let errors = rejectedBuild.errors.map((error) => error.message).join(',');
         errors.substr(0, errors.length - 1);
-        console.log("joined errors: ", errors);
+        // console.log("joined errors: ", errors);
         core.setFailed(errors);
     }
     core.setOutput("response", responseJson);
@@ -92,9 +89,8 @@ exports.submitBuildInfo = submitBuildInfo;
         const clientId = core.getInput('client-id');
         const clientSecret = core.getInput('client-secret');
         const accessTokenResponse = await token.getAccessToken(clientId, clientSecret);
-        console.log("accessTokenResponse: ", accessTokenResponse);
         await submitBuildInfo(accessTokenResponse.access_token);
-        console.log("finished submiting build info");
+        // console.log("finished submiting build info");
     }
     catch (error) {
         core.setFailed(error.message);
